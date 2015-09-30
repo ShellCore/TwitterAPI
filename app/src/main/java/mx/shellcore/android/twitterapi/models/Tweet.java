@@ -1,5 +1,7 @@
 package mx.shellcore.android.twitterapi.models;
 
+import mx.shellcore.android.twitterapi.utils.DateUtils;
+
 public class Tweet {
 
     private String userName;
@@ -15,8 +17,9 @@ public class Tweet {
         this.userName = userName;
         this.userTwitter = userTwitter;
         this.userTweet = userTweet;
-        this.tweetDate = tweetDate;
         this.urlImage = urlImage;
+
+        setTweetDate(tweetDate);
     }
 
     public String getTweetDate() {
@@ -24,7 +27,7 @@ public class Tweet {
     }
 
     public void setTweetDate(String tweetDate) {
-        this.tweetDate = tweetDate;
+        this.tweetDate = DateUtils.setDateFormat(tweetDate);
     }
 
     public String getUrlImage() {
@@ -52,7 +55,7 @@ public class Tweet {
     }
 
     public String getUserTwitter() {
-        return userTwitter;
+        return "@" + userTwitter;
     }
 
     public void setUserTwitter(String userTwitter) {
