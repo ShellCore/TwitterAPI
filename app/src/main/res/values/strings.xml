@@ -3,4 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="user_twitter">\@user_twitter</string>
+    <string name="user_name">User name</string>
+    <string name="user_tweet">Mensaje del usuario</string>
+    <string name="tweet_date">99/12/31 23:59</string>
 </resources>
