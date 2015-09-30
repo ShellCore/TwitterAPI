@@ -3,6 +3,7 @@ package mx.shellcore.android.twitterapi.utils;
 import android.util.Base64;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -10,6 +11,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+
+import mx.shellcore.android.twitterapi.models.Tweet;
 
 public class TwitterUtils {
 
@@ -59,7 +63,6 @@ public class TwitterUtils {
 
         } catch (Exception e) {
             Log.e(TAG, "POST error: " + Log.getStackTraceString(e));
-
         } finally {
             if (httpConnection != null) {
                 httpConnection.disconnect();
@@ -69,11 +72,13 @@ public class TwitterUtils {
         return response.toString();
     }
 
-    public static String getTimelineForSearchTerm(String searchTerm) {
+    public static ArrayList<Tweet> getTimelineForSearchTerm(String searchTerm) {
 
         HttpURLConnection httpConnection = null;
         BufferedReader bufferedReader = null;
         StringBuilder response = new StringBuilder();
+
+        ArrayList<Tweet> tweets = new ArrayList<>();
 
         try {
 
@@ -100,15 +105,35 @@ public class TwitterUtils {
             Log.d(TAG, "GET response code: " + String.valueOf(httpConnection.getResponseCode()));
             Log.d(TAG, "JSON response:\n\n" + response.toString() + "\n\n");
 
-            return response.toString();
+            // Objeto statuses
+            JSONObject jsonResponse = new JSONObject(response.toString());
+
+            // Arreglo de "statuses"
+            JSONArray jsonArray = jsonResponse.getJSONArray("statuses");
+
+            // Objeto
+            JSONObject tweetJsonObject;
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                tweetJsonObject = jsonArray.getJSONObject(i);
+
+                Tweet tweet = new Tweet();
+                tweet.setUserName(tweetJsonObject.getJSONObject("user").getString("name"));
+                tweet.setUrlImage(tweetJsonObject.getJSONObject("user").getString("profile_image_url"));
+                tweet.setUserTwitter(tweetJsonObject.getJSONObject("user").getString("screen_name"));
+                tweet.setUserTweet(tweetJsonObject.getString("text"));
+                tweet.setTweetDate(tweetJsonObject.getString("created_at"));
+
+                tweets.add(i, tweet);
+            }
 
         } catch (Exception e) {
             Log.e(TAG, "GET error: " + Log.getStackTraceString(e));
-            return null;
         } finally {
             if (httpConnection != null) {
                 httpConnection.disconnect();
             }
         }
+        return tweets;
     }
 }

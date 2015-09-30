@@ -14,9 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 import mx.shellcore.android.twitterapi.R;
@@ -95,31 +92,7 @@ public class TweetListFragment extends Fragment {
             ArrayList<Tweet> tweets = new ArrayList<>();
 
             try {
-                String timeline = TwitterUtils.getTimelineForSearchTerm(ConstantUtils.MEJORANDROID_TERM);
-
-                // Objeto statuses
-                JSONObject jsonResponse = new JSONObject(timeline);
-
-                // Arreglo de "statuses"
-                JSONArray jsonArray = jsonResponse.getJSONArray("statuses");
-
-                // Objeto
-                JSONObject tweetJsonObject;
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    tweetJsonObject = jsonArray.getJSONObject(i);
-
-                    Tweet tweet = new Tweet();
-                    tweet.setUserName(tweetJsonObject.getJSONObject("user").getString("name"));
-                    tweet.setUrlImage(tweetJsonObject.getJSONObject("user").getString("profile_image_url"));
-                    tweet.setUserTwitter(tweetJsonObject.getJSONObject("user").getString("screen_name"));
-                    tweet.setUserTweet(tweetJsonObject.getString("text"));
-                    tweet.setTweetDate(tweetJsonObject.getString("created_at"));
-
-                    tweets.add(i, tweet);
-
-                }
-
+                tweets = TwitterUtils.getTimelineForSearchTerm(ConstantUtils.MEJORANDROID_TERM);
             } catch (Exception e) {
                 Log.e("Error JSON exception ", Log.getStackTraceString(e));
             }
