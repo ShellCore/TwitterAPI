@@ -59,6 +59,7 @@ public class TwitterUtils {
 
         } catch (Exception e) {
             Log.e(TAG, "POST error: " + Log.getStackTraceString(e));
+
         } finally {
             if (httpConnection != null) {
                 httpConnection.disconnect();

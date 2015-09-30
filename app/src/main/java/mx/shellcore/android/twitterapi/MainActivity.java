@@ -1,9 +1,14 @@
 package mx.shellcore.android.twitterapi;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import mx.shellcore.android.twitterapi.utils.ConstantUtils;
+import mx.shellcore.android.twitterapi.utils.TwitterUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -11,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        new GetTimelineTask().execute();
     }
 
     @Override
@@ -33,5 +40,31 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class GetTimelineTask extends AsyncTask<Object, Void, Void> {
+
+        private ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = new ProgressDialog(MainActivity.this);
+            progressDialog.setTitle(getString(R.string.tweet_search_loader));
+            progressDialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressDialog.dismiss();
+        }
+
+        @Override
+        protected Void doInBackground(Object... params) {
+            TwitterUtils.getTimelineForSearchTerm(ConstantUtils.MEJORANDROID_TERM);
+            return null;
+        }
     }
 }

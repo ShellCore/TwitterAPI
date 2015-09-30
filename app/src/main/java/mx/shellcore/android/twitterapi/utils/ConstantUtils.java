@@ -9,5 +9,5 @@ public class ConstantUtils {
     public static final String CONSUMER_KEY = "jNGMc4ZcvKUiVdsnwYz0p9uPS";
     public static final String CONSUMER_SECRET = "SfNmzvWAlvLMKrdMeQUjeYYfj6TQVFp3rLM0n0O0dO0OPnpOeD";
 
-    public static final String MEJORANDROID_TERM = "mejorandroid";
+    public static final String MEJORANDROID_TERM = "feedly";
 }
