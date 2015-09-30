@@ -1,23 +1,33 @@
 package mx.shellcore.android.twitterapi;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
+import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import mx.shellcore.android.twitterapi.utils.ConstantUtils;
-import mx.shellcore.android.twitterapi.utils.TwitterUtils;
+import mx.shellcore.android.twitterapi.fragments.TweetListFragment;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    private Fragment tweetListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        initializeFragments();
+    }
 
-        new GetTimelineTask().execute();
+    private void initializeFragments() {
+        tweetListFragment = new TweetListFragment();
+
+        getFragmentManager().beginTransaction()
+                .add(R.id.rel_main, tweetListFragment)
+                .show(tweetListFragment)
+                .commit();
     }
 
     @Override
@@ -40,31 +50,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    class GetTimelineTask extends AsyncTask<Object, Void, Void> {
-
-        private ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            progressDialog = new ProgressDialog(MainActivity.this);
-            progressDialog.setTitle(getString(R.string.tweet_search_loader));
-            progressDialog.show();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            progressDialog.dismiss();
-        }
-
-        @Override
-        protected Void doInBackground(Object... params) {
-            TwitterUtils.getTimelineForSearchTerm(ConstantUtils.MEJORANDROID_TERM);
-            return null;
-        }
     }
 }

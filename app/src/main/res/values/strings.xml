@@ -8,5 +8,6 @@
     <string name="user_tweet">Mensaje del usuario</string>
     <string name="tweet_date">99/12/31 23:59</string>
     <string name="tweet_search_loader">Descargar tweets...</string>
+    <string name="tweets_not_found">No se encontraron tweets.</string>
 
 </resources>
