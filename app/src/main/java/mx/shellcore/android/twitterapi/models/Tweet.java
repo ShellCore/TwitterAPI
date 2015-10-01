@@ -4,6 +4,7 @@ import mx.shellcore.android.twitterapi.utils.DateUtils;
 
 public class Tweet {
 
+    private String id;
     private String userName;
     private String userTwitter;
     private String userTweet;
@@ -13,13 +14,22 @@ public class Tweet {
     public Tweet() {
     }
 
-    public Tweet(String userName, String userTwitter, String userTweet, String tweetDate, String urlImage) {
+    public Tweet(String id,String userName, String userTwitter, String userTweet, String tweetDate, String urlImage) {
+        this.id = id;
         this.userName = userName;
         this.userTwitter = userTwitter;
         this.userTweet = userTweet;
         this.urlImage = urlImage;
 
         setTweetDate(tweetDate);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTweetDate() {

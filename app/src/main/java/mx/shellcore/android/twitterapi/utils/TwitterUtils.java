@@ -118,6 +118,7 @@ public class TwitterUtils {
                 tweetJsonObject = jsonArray.getJSONObject(i);
 
                 Tweet tweet = new Tweet();
+                tweet.setId(tweetJsonObject.getString("id_str"));
                 tweet.setUserName(tweetJsonObject.getJSONObject("user").getString("name"));
                 tweet.setUrlImage(tweetJsonObject.getJSONObject("user").getString("profile_image_url"));
                 tweet.setUserTwitter(tweetJsonObject.getJSONObject("user").getString("screen_name"));
