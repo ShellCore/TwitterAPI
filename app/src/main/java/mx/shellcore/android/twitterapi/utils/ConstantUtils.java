@@ -10,4 +10,6 @@ public class ConstantUtils {
     public static final String CONSUMER_SECRET = "SfNmzvWAlvLMKrdMeQUjeYYfj6TQVFp3rLM0n0O0dO0OPnpOeD";
 
     public static final String MEJORANDROID_TERM = "feedly";
+
+    public static final String NEW_TWEETS_INTENT_FILTER = "mx.shellcore.android.twitterapi.NEW_TWEETS";
 }

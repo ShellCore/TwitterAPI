@@ -65,6 +65,7 @@ public class UpdaterService extends Service {
     private class Updater extends Thread {
 
         private ArrayList<Tweet> timeline = new ArrayList<>();
+        private Intent intent;
 
         public Updater() {
             super("UpdaterService-UpdaterThread");
@@ -90,6 +91,9 @@ public class UpdaterService extends Service {
 
                         dbOperations.insertOrIgnore(values);
                     }
+
+                    intent = new Intent(ConstantUtils.NEW_TWEETS_INTENT_FILTER);
+                    updaterService.sendBroadcast(intent);
 
                     Thread.sleep(DELAY);
                 } catch (InterruptedException e) {

@@ -59,7 +59,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
     public void addAll(@NonNull ArrayList<Tweet> tweets) {
         this.tweets = new ArrayList<>();
         this.tweets.addAll(tweets);
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
     }
 
     class TweetViewHolder extends RecyclerView.ViewHolder {

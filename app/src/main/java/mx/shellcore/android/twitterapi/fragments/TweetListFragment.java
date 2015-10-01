@@ -3,6 +3,10 @@ package mx.shellcore.android.twitterapi.fragments;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,6 +24,7 @@ import mx.shellcore.android.twitterapi.R;
 import mx.shellcore.android.twitterapi.adapters.TweetAdapter;
 import mx.shellcore.android.twitterapi.database.DBOperations;
 import mx.shellcore.android.twitterapi.models.Tweet;
+import mx.shellcore.android.twitterapi.utils.ConstantUtils;
 
 public class TweetListFragment extends Fragment {
 
@@ -30,6 +35,8 @@ public class TweetListFragment extends Fragment {
     private RecyclerView recTweets;
     private TweetAdapter tweetAdapter;
     private DBOperations dbOperations;
+    private TimelineReceiver receiver;
+    private IntentFilter filter;
 
     public TweetListFragment() {
         // Required empty public constructor
@@ -48,6 +55,10 @@ public class TweetListFragment extends Fragment {
 
         dbOperations = new DBOperations(getActivity().getApplicationContext());
 
+        receiver = new TimelineReceiver();
+        filter = new IntentFilter(ConstantUtils.NEW_TWEETS_INTENT_FILTER);
+
+
         tweetAdapter = new TweetAdapter(getActivity().getApplicationContext(), tweets);
 
         recTweets = (RecyclerView) getActivity().findViewById(R.id.rec_tweets);
@@ -57,11 +68,29 @@ public class TweetListFragment extends Fragment {
         recTweets.setItemAnimator(new DefaultItemAnimator());
 
         new GetTimelineTask().execute();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().unregisterReceiver(receiver);
     }
 
     private void updateTweets(ArrayList<Tweet> tweets) {
         tweetAdapter.addAll(tweets);
+    }
+
+    private void updateListWithCache() {
+        recTweets.setAdapter(tweetAdapter);
         tweetAdapter.notifyDataSetChanged();
+
     }
 
     class GetTimelineTask extends AsyncTask<Object, Void, ArrayList<Tweet>> {
@@ -102,6 +131,14 @@ public class TweetListFragment extends Fragment {
             }
 
             return tweets;
+        }
+    }
+
+    class TimelineReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateListWithCache();
         }
     }
 }
