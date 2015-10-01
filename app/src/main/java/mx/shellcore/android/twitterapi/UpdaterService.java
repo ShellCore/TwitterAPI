@@ -1,11 +1,17 @@
 package mx.shellcore.android.twitterapi;
 
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.util.ArrayList;
+
+import mx.shellcore.android.twitterapi.database.DBHelper;
+import mx.shellcore.android.twitterapi.database.DBOperations;
+import mx.shellcore.android.twitterapi.models.Tweet;
 import mx.shellcore.android.twitterapi.utils.ConstantUtils;
 import mx.shellcore.android.twitterapi.utils.TwitterUtils;
 
@@ -18,6 +24,7 @@ public class UpdaterService extends Service {
 
     private Updater updater;
     private TwitterApiApplication application;
+    private DBOperations dbOperations;
 
 
     @Nullable
@@ -32,6 +39,7 @@ public class UpdaterService extends Service {
         Log.d(TAG, "onCreated");
         updater = new Updater();
         application = (TwitterApiApplication) getApplication();
+        dbOperations = new DBOperations(this);
     }
 
     @Override
@@ -56,6 +64,8 @@ public class UpdaterService extends Service {
 
     private class Updater extends Thread {
 
+        private ArrayList<Tweet> timeline = new ArrayList<>();
+
         public Updater() {
             super("UpdaterService-UpdaterThread");
         }
@@ -66,7 +76,21 @@ public class UpdaterService extends Service {
             while (updaterService.runFlag) {
                 Log.d(TAG, "UpdaterThread running");
                 try {
-                    TwitterUtils.getTimelineForSearchTerm(ConstantUtils.MEJORANDROID_TERM);
+                    timeline = TwitterUtils.getTimelineForSearchTerm(ConstantUtils.MEJORANDROID_TERM);
+
+                    ContentValues values = new ContentValues();
+                    for (Tweet tweet : timeline) {
+                        values.clear();
+                        values.put(DBHelper.C_ID, tweet.getId());
+                        values.put(DBHelper.C_NAME, tweet.getUserName());
+                        values.put(DBHelper.C_SCREEN_NAME, tweet.getUserTwitter());
+                        values.put(DBHelper.C_IMAGE_PROFILE_URL, tweet.getUrlImage());
+                        values.put(DBHelper.C_TEXT, tweet.getUserTweet());
+                        values.put(DBHelper.C_CREATED_AT, tweet.getTweetDate());
+
+                        dbOperations.insertOrIgnore(values);
+                    }
+
                     Thread.sleep(DELAY);
                 } catch (InterruptedException e) {
                     updaterService.runFlag = false;
