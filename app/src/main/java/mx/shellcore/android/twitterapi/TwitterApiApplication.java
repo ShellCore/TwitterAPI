@@ -8,6 +8,8 @@ public class TwitterApiApplication extends Application {
 
     public static final String TAG = TwitterApiApplication.class.getSimpleName();
 
+    private boolean serviceRunningFlag;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -20,5 +22,13 @@ public class TwitterApiApplication extends Application {
         super.onTerminate();
         Log.d(TAG, "onTerminated");
         stopService(new Intent(this, UpdaterService.class));
+    }
+
+    public boolean isServiceRunning() {
+        return serviceRunningFlag;
+    }
+
+    public void setServiceRunningFlag(boolean serviceRunningFlag) {
+        this.serviceRunningFlag = serviceRunningFlag;
     }
 }
