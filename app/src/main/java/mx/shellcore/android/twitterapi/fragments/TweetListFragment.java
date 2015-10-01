@@ -18,9 +18,8 @@ import java.util.ArrayList;
 
 import mx.shellcore.android.twitterapi.R;
 import mx.shellcore.android.twitterapi.adapters.TweetAdapter;
+import mx.shellcore.android.twitterapi.database.DBOperations;
 import mx.shellcore.android.twitterapi.models.Tweet;
-import mx.shellcore.android.twitterapi.utils.ConstantUtils;
-import mx.shellcore.android.twitterapi.utils.TwitterUtils;
 
 public class TweetListFragment extends Fragment {
 
@@ -30,6 +29,7 @@ public class TweetListFragment extends Fragment {
     // Components
     private RecyclerView recTweets;
     private TweetAdapter tweetAdapter;
+    private DBOperations dbOperations;
 
     public TweetListFragment() {
         // Required empty public constructor
@@ -46,6 +46,8 @@ public class TweetListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        dbOperations = new DBOperations(getActivity().getApplicationContext());
+
         tweetAdapter = new TweetAdapter(getActivity().getApplicationContext(), tweets);
 
         recTweets = (RecyclerView) getActivity().findViewById(R.id.rec_tweets);
@@ -59,6 +61,7 @@ public class TweetListFragment extends Fragment {
 
     private void updateTweets(ArrayList<Tweet> tweets) {
         tweetAdapter.addAll(tweets);
+        tweetAdapter.notifyDataSetChanged();
     }
 
     class GetTimelineTask extends AsyncTask<Object, Void, ArrayList<Tweet>> {
@@ -92,7 +95,8 @@ public class TweetListFragment extends Fragment {
             ArrayList<Tweet> tweets = new ArrayList<>();
 
             try {
-                tweets = TwitterUtils.getTimelineForSearchTerm(ConstantUtils.MEJORANDROID_TERM);
+//                tweets = TwitterUtils.getTimelineForSearchTerm(ConstantUtils.MEJORANDROID_TERM);
+                tweets = dbOperations.getStatusUpdates();
             } catch (Exception e) {
                 Log.e("Error JSON exception ", Log.getStackTraceString(e));
             }

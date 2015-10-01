@@ -13,13 +13,13 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "timeline.db";
     public static final int DB_VERSION = 1;
 
-    public static final String TABLE = "timeline";
-    public static final String C_ID = BaseColumns._ID;
-    public static final String C_NAME = "name";
-    public static final String C_SCREEN_NAME = "screen_name";
+    public static final String TABLE               = "timeline";
+    public static final String C_ID                = BaseColumns._ID;
+    public static final String C_NAME              = "name";
+    public static final String C_SCREEN_NAME       = "screen_name";
     public static final String C_IMAGE_PROFILE_URL = "image_profile_url";
-    public static final String C_TEXT = "text";
-    public static final String C_CREATED_AT = "created_at";
+    public static final String C_TEXT              = "text";
+    public static final String C_CREATED_AT        = "created_at";
 
     public static final int C_ID_INDEX = 0;
     public static final int C_NAME_INDEX = 1;
@@ -37,16 +37,16 @@ public class DBHelper extends SQLiteOpenHelper {
         StringBuilder sql = new StringBuilder();
         sql.append("create table " + TABLE);
         sql.append(" (");
-        sql.append(" " + C_ID + " INT PRIMARY KEY" + ",");
-        sql.append(" " + C_NAME + " TEXT" + ",");
-        sql.append(" " + C_SCREEN_NAME + "TEXT" + ",");
-        sql.append(" " + C_IMAGE_PROFILE_URL + "TEXT" + ",");
-        sql.append(" " + C_TEXT + "TEXT" + ",");
-        sql.append(" " + C_CREATED_AT + "TEXT");
+        sql.append(" " + C_ID                + " INT PRIMARY KEY" + ",");
+        sql.append(" " + C_NAME              + " TEXT" + ",");
+        sql.append(" " + C_SCREEN_NAME       + " TEXT" + ",");
+        sql.append(" " + C_IMAGE_PROFILE_URL + " TEXT" + ",");
+        sql.append(" " + C_TEXT              + " TEXT" + ",");
+        sql.append(" " + C_CREATED_AT        + " TEXT");
         sql.append(" )");
 
+        Log.w(TAG, "onCreated sql: " + sql.toString());
         db.execSQL(sql.toString());
-        Log.d(TAG, "onCreated sql: " + sql.toString());
     }
 
     @Override
