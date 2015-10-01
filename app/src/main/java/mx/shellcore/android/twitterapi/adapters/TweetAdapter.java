@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import mx.shellcore.android.twitterapi.R;
 import mx.shellcore.android.twitterapi.models.Tweet;
+import mx.shellcore.android.twitterapi.utils.DateUtils;
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHolder> {
 
@@ -45,9 +46,9 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
         }
 
         holder.setUserName(tweet.getUserName());
-        holder.setUserTwitter(tweet.getUserTwitter());
+        holder.setUserTwitter("@" + tweet.getUserTwitter());
         holder.setUserTweet(tweet.getUserTweet());
-        holder.setTweetDate(tweet.getTweetDate());
+        holder.setTweetDate(DateUtils.setDateFormat(tweet.getTweetDate()));
     }
 
     @Override
